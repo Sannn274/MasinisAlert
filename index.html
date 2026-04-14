@@ -1,26 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MasinisAlert Train Station Alert System</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>MasinisAlert — Sistem Pengingat Stasiun</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <h1>Welcome to the MasinisAlert System</h1>
-    </header>
-    <main>
-        <section>
-            <h2>Train Alerts</h2>
-            <div id="alert-container">
-                <p>No alerts at this moment.</p>
-            </div>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2026 MasinisAlert. All Rights Reserved.</p>
-    </footer>
-    <script src="script.js"></script>
+
+<div class="app">
+
+  <!-- ── HEADER ── -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo-icon">🚆</div>
+      <div>
+        <div class="logo-text">MasinisAlert</div>
+        <div class="logo-sub">Sistem Pengingat Stasiun Kereta</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-chip">
+        <div class="status-dot" id="gpsDot"></div>
+        <span id="gpsLabel">GPS Off</span>
+      </div>
+      <div class="time-display" id="clockDisplay">00:00:00</div>
+    </div>
+  </div>
+
+  <!-- ── BUZZER ZONE BANNER ── -->
+  <div class="buzzer-banner" id="buzzerBanner">
+    🔴 BUZZER ZONE AKTIF — SEGMEN KRITIS — PERHATIAN PENUH DIPERLUKAN 🔴
+  </div>
+
+  <!-- ── MAIN CONTENT ── -->
+  <div class="main">
+
+    <!-- Peta Canvas -->
+    <div class="map-panel">
+      <canvas id="mapCanvas"></canvas>
+      <div class="map-overlay-tl">
+        <div class="speed-val" id="speedVal">0</div>
+        <div class="speed-unit">km/h</div>
+      </div>
+      <div class="map-overlay-tr" id="coordOverlay">—, —</div>
+    </div>
+
+    <!-- Info Panel Kanan -->
+    <div class="info-panel">
+
+      <!-- Koordinat & status -->
+      <div class="section">
+        <div class="section-title">Posisi Kereta</div>
+        <div class="coord-grid">
+          <div class="coord-card">
+            <div class="coord-label">Latitude</div>
+            <div class="coord-val" id="latVal">—</div>
+          </div>
+          <div class="coord-card">
+            <div class="coord-label">Longitude</div>
+            <div class="coord-val" id="lngVal">—</div>
+          </div>
+          <div class="coord-card">
+            <div class="coord-label">Kecepatan</div>
+            <div class="coord-val" id="spdVal">— km/h</div>
+          </div>
+          <div class="coord-card">
+            <div class="coord-label">Status</div>
+            <div class="coord-val" id="statusVal" style="color:var(--rail-muted)">Standby</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daftar Stasiun -->
+      <div class="section" style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
+        <div class="section-title">Stasiun di Rute</div>
+        <div class="station-list" id="stationList"></div>
+      </div>
+
+      <!-- Alert Box -->
+      <div class="alert-container">
+        <div class="alert-box" id="alertBox">
+          <div class="alert-icon" id="alertIcon">⚠️</div>
+          <div class="alert-text" id="alertText"></div>
+        </div>
+      </div>
+
+      <!-- GPS Button -->
+      <button class="btn-gps" id="gpsBtn">📍 Gunakan GPS Perangkat (Live)</button>
+
+      <!-- Control Buttons -->
+      <div class="btn-row">
+        <button class="btn btn-start" id="startBtn">▶ Mulai</button>
+        <button class="btn btn-stop"  id="stopBtn"  disabled>⏹ Stop</button>
+        <button class="btn btn-reset" id="resetBtn">↺ Reset</button>
+      </div>
+
+    </div>
+  </div><!-- /main -->
+
+  <!-- ── BOTTOM BAR ── -->
+  <div class="bottom-bar">
+    <div class="sim-panel">
+      <span class="sim-label">Simulasi Rute:</span>
+      <div class="sim-slider-wrap">
+        <input type="range" id="trainSlider" min="0" max="100" value="0" step="1">
+        <span class="sim-pct" id="simPct">0%</span>
+      </div>
+      <div class="speed-control">
+        <span class="speed-label">Kecepatan sim:</span>
+        <button class="speed-btn" id="slowerBtn">−</button>
+        <span style="font-size:12px;font-family:monospace;color:var(--rail-yellow);min-width:28px;text-align:center;" id="simSpeedLabel">1×</span>
+        <button class="speed-btn" id="fasterBtn">+</button>
+      </div>
+    </div>
+    <div class="log-panel" id="logPanel"></div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- ── MODAL ALARM ── -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-icon">🚨</div>
+    <div class="modal-title" id="modalTitle">TIBA DI STASIUN</div>
+    <div class="modal-sub"   id="modalSub">Kereta memasuki area stasiun</div>
+    <button class="modal-btn" id="modalClose">✔ Mengerti</button>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
 </body>
 </html>
